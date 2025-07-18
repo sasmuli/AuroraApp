@@ -12,16 +12,6 @@ class MapCard extends GetView<MapCardController> {
 
   @override
   Widget build(BuildContext context) {
-    // Log location data when building the map card
-    logger.i('[MapCard] Building with location: ${controller.latitude}, ${controller.longitude}');
-    
-    if (controller.locationService.hasLocation) {
-      final pos = controller.locationService.currentPosition.value!;
-      logger.i('[MapCard] Location accuracy: ${pos.accuracy}m, timestamp: ${pos.timestamp}');
-    } else {
-      logger.w('[MapCard] No location data available');
-    }
-    
     return Obx(
       () => GestureDetector(
         onTap: () {

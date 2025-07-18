@@ -18,7 +18,7 @@ class LocationService extends GetxService {
   static const double defaultLongitude = 25.0;
 
   // Configuration
-  final Duration locationTimeout = const Duration(seconds: 45);
+  final Duration locationTimeout = const Duration(seconds: 10);
   final LocationAccuracy desiredAccuracy = LocationAccuracy.lowest;
 
   // Initialize the service
