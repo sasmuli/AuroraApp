@@ -1,16 +1,10 @@
 import 'dart:io';
-import 'package:aurora_app/logger.dart';
 import 'package:aurora_app/services/location_serivce.dart';
 import 'package:get/get.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MapCardController extends GetxController {
   MapCardController({required this.locationService});
-
-  // Map API keys
-  static const String _androidApiKey =
-      'AIzaSyBgV2sSA-2aCXA_rUoLfhclYaABG_uA7Xw'; //TODO hide this
-  static const String _iosApiKey =
-      'AIzaSyCCUbDanqN5tRLvHN3YVDgcOe0UVcLpHOo'; //TODO hide this
   static const int defaultZoom = 3;
   final RxBool isLoading = true.obs;
   final RxString errorMessage = ''.obs;
@@ -27,83 +21,51 @@ class MapCardController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    logger.i('[MapCardController] Initializing');
-    apiKey.value = Platform.isAndroid ? _androidApiKey : _iosApiKey;
+    apiKey.value = Platform.isAndroid
+        ? dotenv.env['ANDROID_MAP_API_KEY'] ?? ''
+        : dotenv.env['IOS_MAP_API_KEY'] ?? '';
     initializeLocation();
   }
 
   void initializeLocation() {
-    logger.i('[MapCardController] Initializing location');
     isLoading.value = true;
     errorMessage.value = '';
-    
-    // Log current location state
-    logger.i('[MapCardController] Location service has location: ${locationService.hasLocation}');
-    logger.i('[MapCardController] Permission granted: ${locationService.locationPermissionGranted.value}');
-    
+
     if (!locationService.hasLocation) {
-      logger.i('[MapCardController] Requesting user location');
       locationService
           .getUserLocation()
           .then((position) {
             isLoading.value = false;
             if (locationService.errorMessage.isNotEmpty) {
-              logger.w('[MapCardController] Location error: ${locationService.errorMessage.value}');
               errorMessage.value = locationService.errorMessage.value;
-            } else if (position != null) {
-              logger.i('[MapCardController] Got position: ${position.latitude}, ${position.longitude}, accuracy: ${position.accuracy}m');
-            } else {
-              logger.w('[MapCardController] No position returned but no error either');
             }
           })
           .catchError((e) {
             errorMessage.value = 'Failed to get location: $e';
             isLoading.value = false;
-            logger.e('[MapCardController] Error getting user location: $e');
           });
     } else {
-      logger.i('[MapCardController] Using existing location: ${locationService.latitude}, ${locationService.longitude}');
       isLoading.value = false;
     }
     _setupLocationListeners();
   }
 
   void _setupLocationListeners() {
-    logger.i('[MapCardController] Setting up location listeners');
-    
     ever(locationService.isLoading, (loading) {
-      logger.i('[MapCardController] Location service loading state changed: $loading');
       isLoading.value = loading;
     });
-    
+
     ever(locationService.errorMessage, (error) {
       if (error.isNotEmpty) {
-        logger.w('[MapCardController] Location service error: $error');
         errorMessage.value = error;
-      }
-    });
-    
-    // Listen for position changes
-    ever(locationService.currentPosition, (position) {
-      if (position != null) {
-        logger.i('[MapCardController] Position updated: ${position.latitude}, ${position.longitude}, accuracy: ${position.accuracy}m');
-      } else {
-        logger.w('[MapCardController] Position cleared');
       }
     });
   }
 
   void retryLocationFetch() {
-    logger.i('[MapCardController] Retrying location fetch');
     isLoading.value = true;
     errorMessage.value = '';
-    locationService.getUserLocation().then((position) {
-      if (position != null) {
-        logger.i('[MapCardController] Retry successful: ${position.latitude}, ${position.longitude}');
-      } else {
-        logger.w('[MapCardController] Retry returned null position');
-      }
-    });
+    locationService.getUserLocation();
   }
 
   // Get the map URL for the current location
@@ -150,9 +112,6 @@ class MapCardController extends GetxController {
         '$encodedStyles'
         '&key=${apiKey.value}';
 
-    logger.i(
-      'Static map URL: ${url.replaceAll(apiKey.value, "API_KEY_HIDDEN")}',
-    );
     return url;
   }
 }

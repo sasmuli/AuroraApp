@@ -22,22 +22,23 @@ class MapController extends GetxController {
   void onInit() {
     super.onInit();
     logger.i('[MapController] Initialized');
-    
-    // Log location status on initialization
-    _logLocationStatus();
-    
+
     fetchAuroraData();
     _updateTimer = Timer.periodic(
       Duration(minutes: updateIntervalMinutes),
       (_) => fetchAuroraData(),
     );
 
-    logger.i('[MapController] Scheduled KP updates every $updateIntervalMinutes minutes');
-    
+    logger.i(
+      '[MapController] Scheduled KP updates every $updateIntervalMinutes minutes',
+    );
+
     // Monitor location changes
     ever(_locationService.currentPosition, (position) {
       if (position != null) {
-        logger.i('[MapController] Location updated: ${position.latitude}, ${position.longitude}');
+        logger.i(
+          '[MapController] Location updated: ${position.latitude}, ${position.longitude}',
+        );
       }
     });
   }
@@ -49,30 +50,9 @@ class MapController extends GetxController {
     super.onClose();
   }
 
-  // Fetch aurora data from NOAA OVATION API using user's current location
-  // Log current location status
-  void _logLocationStatus() {
-    logger.i('[MapController] Checking location status');
-    if (_locationService.locationPermissionGranted.value) {
-      logger.i('[MapController] Location permission granted');
-    } else {
-      logger.w('[MapController] Location permission not granted');
-    }
-    
-    if (_locationService.hasLocation) {
-      final pos = _locationService.currentPosition.value!;
-      logger.i('[MapController] Current location: ${pos.latitude}, ${pos.longitude}, accuracy: ${pos.accuracy}m');
-    } else {
-      logger.w('[MapController] No location data available');
-    }
-  }
-
   Future<void> fetchAuroraData() async {
     isLoading.value = true;
     errorMessage.value = '';
-    
-    // Log location status before fetching aurora data
-    _logLocationStatus();
 
     logger.i('[MapController] Fetching aurora data from NOAA OVATION...');
 
@@ -104,7 +84,6 @@ class MapController extends GetxController {
   // Manually trigger a refresh of the aurora data
   void refreshData() {
     logger.i('[MapController] Manual refresh requested');
-    _logLocationStatus();
     fetchAuroraData();
   }
 }

@@ -18,11 +18,8 @@ class LocationService extends GetxService {
   static const double defaultLongitude = 25.0;
 
   // Configuration
-  final Duration locationTimeout = const Duration(seconds: 10);
+  final Duration locationTimeout = const Duration(seconds: 45);
   final LocationAccuracy desiredAccuracy = LocationAccuracy.lowest;
-  
-  // Internal state
-  bool _isRequestingLocation = false;
 
   // Initialize the service
   Future<LocationService> init() async {
@@ -33,15 +30,8 @@ class LocationService extends GetxService {
 
   // Get the user's current location
   Future<Position?> getUserLocation() async {
-    // If already requesting location, don't start a new request
-    if (_isRequestingLocation) {
-      logger.i('Location request already in progress');
-      return currentPosition.value;
-    }
-    
     isLoading.value = true;
     errorMessage.value = '';
-    _isRequestingLocation = true;
 
     try {
       if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
@@ -84,41 +74,20 @@ class LocationService extends GetxService {
 
         // Permissions granted, get position
         locationPermissionGranted.value = true;
-        logger.i('Getting current position with timeout: ${locationTimeout.inSeconds}s');
-        
-        Position? position;
-        try {
-          // First try with a short timeout
-          position = await Geolocator.getCurrentPosition(
-            desiredAccuracy: desiredAccuracy,
-            timeLimit: locationTimeout,
-          );
-          
-          logger.i(
-            'Position acquired: lat=${position.latitude}, lng=${position.longitude}, '
-            'accuracy=${position.accuracy}m, timestamp=${position.timestamp}',
-          );
-        } catch (e) {
-          logger.w('Could not get current position: $e');
-          logger.i('Trying to get last known position instead');
-          
-          // Fallback to last known position
-          position = await getLastKnownPosition();
-          
-          if (position != null) {
-            logger.i('Using last known position: lat=${position.latitude}, lng=${position.longitude}');
-          } else {
-            logger.w('No last known position available');
-          }
-        }
-        
-        if (position != null) {
-          // Update the observable position
-          currentPosition.value = position;
-        }
-        
+        logger.i('Getting current position');
+        final position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: desiredAccuracy,
+          timeLimit: locationTimeout,
+        );
+
+        logger.i(
+          'Position acquired: lat=${position.latitude}, lng=${position.longitude}, '
+          'accuracy=${position.accuracy}m, timestamp=${position.timestamp}',
+        );
+
+        // Update the observable position
+        currentPosition.value = position;
         isLoading.value = false;
-        _isRequestingLocation = false;
         return position;
       } else {
         logger.w('Platform not supported for Geolocator');
@@ -130,7 +99,6 @@ class LocationService extends GetxService {
       logger.e('Error getting user location: $e');
       errorMessage.value = 'Failed to get location: $e';
       isLoading.value = false;
-      _isRequestingLocation = false;
       return null;
     }
   }
@@ -161,20 +129,6 @@ class LocationService extends GetxService {
         logger.i('Using last known position');
         return lastPosition;
       }
-      
-      // If no last position, try getting one with a very low accuracy
-      try {
-        logger.i('No last position, trying with lowest accuracy and no timeout');
-        final fallbackPosition = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.lowest,
-          timeLimit: null, // No timeout
-        );
-        logger.i('Got fallback position: ${fallbackPosition.latitude}, ${fallbackPosition.longitude}');
-        return fallbackPosition;
-      } catch (innerE) {
-        logger.e('Failed to get fallback position: $innerE');
-      }
-      
       return null;
     } catch (e) {
       logger.e('Error getting last known position: $e');
