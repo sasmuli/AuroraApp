@@ -1,7 +1,8 @@
 import 'dart:io';
+import 'package:aurora_app/presentation/pages/MapPage/full_screen_map_page.dart';
 import 'package:aurora_app/services/location_serivce.dart';
-import 'package:get/get.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
 
 class MapCardController extends GetxController {
   MapCardController({required this.locationService});
@@ -25,6 +26,15 @@ class MapCardController extends GetxController {
         ? dotenv.env['ANDROID_MAP_API_KEY'] ?? ''
         : dotenv.env['IOS_MAP_API_KEY'] ?? '';
     initializeLocation();
+  }
+
+  void toMapPage() {
+    Get.to(
+      () => FullScreenMapPage(
+        initialLatitude: latitude,
+        initialLongitude: longitude,
+      ),
+    );
   }
 
   void initializeLocation() {

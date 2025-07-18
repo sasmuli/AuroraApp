@@ -18,8 +18,6 @@ class LocationService extends GetxService {
   static const double defaultLongitude = 25.0;
 
   // Configuration
-  final Duration locationTimeout = const Duration(seconds: 10);
-  final LocationAccuracy desiredAccuracy = LocationAccuracy.lowest;
 
   // Initialize the service
   Future<LocationService> init() async {
@@ -75,10 +73,7 @@ class LocationService extends GetxService {
         // Permissions granted, get position
         locationPermissionGranted.value = true;
         logger.i('Getting current position');
-        final position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: desiredAccuracy,
-          timeLimit: locationTimeout,
-        );
+        final position = await Geolocator.getCurrentPosition();
 
         logger.i(
           'Position acquired: lat=${position.latitude}, lng=${position.longitude}, '

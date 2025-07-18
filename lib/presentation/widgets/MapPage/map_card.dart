@@ -1,6 +1,5 @@
 import 'package:aurora_app/logger.dart';
 import 'package:aurora_app/presentation/controllers/MapPage/map_card_controller.dart';
-import 'package:aurora_app/presentation/pages/MapPage/full_screen_map_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,12 +15,7 @@ class MapCard extends GetView<MapCardController> {
       () => GestureDetector(
         onTap: () {
           logger.i('[MapCard] Navigating to full screen map');
-          Get.to(
-            () => FullScreenMapPage(
-              initialLatitude: controller.latitude,
-              initialLongitude: controller.longitude,
-            ),
-          );
+          controller.toMapPage();
         },
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
