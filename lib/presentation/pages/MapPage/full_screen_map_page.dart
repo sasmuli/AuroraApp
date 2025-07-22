@@ -18,6 +18,10 @@ class FullScreenMapPage extends GetView<FullScreenMapController> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.initializeWithLocation(initialLatitude, initialLongitude);
+    });
+
     return DefaultTabController(
       length: controller.tabLabels.length,
       child: Scaffold(
@@ -112,14 +116,19 @@ class FullScreenMapPage extends GetView<FullScreenMapController> {
                     controller.longitude.value,
                   ),
                   initialZoom: 3,
-                  minZoom: 2,
+                  minZoom: 1,
                   maxZoom: 10,
+                  cameraConstraint: CameraConstraint.contain(
+                    bounds: LatLngBounds(
+                      const LatLng(-85.0, -180.0),
+                      const LatLng(85.0, 180.0),
+                    ),
+                  ),
                   interactionOptions: const InteractionOptions(
                     flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
                   ),
                 ),
                 children: [
-                  // Dark-themed tile layer
                   TileLayer(
                     urlTemplate:
                         'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
@@ -137,13 +146,12 @@ class FullScreenMapPage extends GetView<FullScreenMapController> {
                           auroraMarker.latitude,
                           auroraMarker.longitude,
                         ),
-                        width: 16,
-                        height: 16,
+                        width: 32,
+                        height: 32,
                         child: Container(
                           decoration: BoxDecoration(
                             color: auroraMarker.color,
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(2),
+                            shape: BoxShape.circle,
                             border: Border.all(
                               color: auroraMarker.color.withValues(alpha: 1.0),
                               width: 0.5,
@@ -153,9 +161,61 @@ class FullScreenMapPage extends GetView<FullScreenMapController> {
                       );
                     }).toList(),
                   ),
+                  Obx(() {
+                    final userLoc = controller.userLocation.value;
+                    if (userLoc == null) return const SizedBox.shrink();
+
+                    return MarkerLayer(
+                      markers: [
+                        Marker(
+                          point: userLoc,
+                          width: 24,
+                          height: 24,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 3),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.3),
+                                  blurRadius: 6,
+                                  spreadRadius: 1,
+                                ),
+                              ],
+                            ),
+                            child: const Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 14,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
                 ],
               ),
             ],
+          );
+        }),
+        floatingActionButton: Obx(() {
+          final userLoc = controller.userLocation.value;
+          if (userLoc == null) return const SizedBox.shrink();
+
+          return FloatingActionButton(
+            onPressed: controller.centerOnUserLocation,
+            backgroundColor: Theme.of(context).primaryColor,
+            child: controller.isLocationLoading.value
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  )
+                : const Icon(Icons.my_location, color: Colors.white),
           );
         }),
       ),

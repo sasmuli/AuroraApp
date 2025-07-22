@@ -66,7 +66,9 @@ class AppBindings extends Bindings {
     );
 
     Get.lazyPut<FullScreenMapController>(
-      () => FullScreenMapController(Get.find<AuroraRepository>()),
+      () => FullScreenMapController(
+        Get.find<AuroraRepository>(),
+      ),
       fenix: true,
     );
   }

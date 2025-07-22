@@ -49,15 +49,15 @@ class AuroraRemoteDataSourceImpl implements AuroraRemoteDataSource {
 
         Color markerColor;
         if (auroraValue >= 80) {
-          markerColor = Colors.purple.withValues(alpha: 0.8);
+          markerColor = Colors.purple.withValues(alpha: 0.4);
         } else if (auroraValue >= 50) {
-          markerColor = Colors.red.withValues(alpha: 0.8);
+          markerColor = Colors.red.withValues(alpha: 0.4);
         } else if (auroraValue >= 30) {
-          markerColor = Colors.orange.withValues(alpha: 0.7);
+          markerColor = Colors.orange.withValues(alpha: 0.4);
         } else if (auroraValue >= 10) {
-          markerColor = Colors.green.withValues(alpha: 0.6);
+          markerColor = Colors.green.withValues(alpha: 0.4);
         } else {
-          markerColor = Colors.grey.withValues(alpha: 0.5);
+          markerColor = Colors.grey.withValues(alpha: 0.1);
         }
 
         markers.add(

@@ -5,6 +5,7 @@ import 'package:aurora_app/logger.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 class FullScreenMapController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -12,13 +13,16 @@ class FullScreenMapController extends GetxController
 
   FullScreenMapController(this.auroraRepository);
 
-  final RxDouble latitude = 65.0.obs;
-  final RxDouble longitude = 25.0.obs;
+  final RxDouble latitude = 0.0.obs;
+  final RxDouble longitude = 0.0.obs;
   final mapController = MapController();
 
   final RxList<AuroraMarker> auroraMarkers = <AuroraMarker>[].obs;
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
+
+  final Rxn<LatLng> userLocation = Rxn<LatLng>();
+  final RxBool isLocationLoading = false.obs;
 
   late TabController tabController;
   final List<String> tabLabels = ['Aurora', 'Clouds', 'All'];
@@ -34,6 +38,17 @@ class FullScreenMapController extends GetxController
     });
     fetchAuroraData();
     _startAutoRefresh();
+  }
+
+  void initializeWithLocation(double lat, double lng) {
+    latitude.value = lat;
+    longitude.value = lng;
+    userLocation.value = LatLng(lat, lng);
+
+    // Move map to the provided location
+    mapController.move(LatLng(lat, lng), 4.0);
+
+    logger.i('Initialized with passed location: $lat, $lng');
   }
 
   Future<void> fetchAuroraData() async {
@@ -62,9 +77,20 @@ class FullScreenMapController extends GetxController
   void _startAutoRefresh() {
     _refreshTimer = Timer.periodic(const Duration(minutes: 10), (timer) {
       logger.i('Auto-refreshing aurora data');
+
       fetchAuroraData();
     });
     logger.i('Auto-refresh started: data will refresh every 10 minutes');
+  }
+
+  void centerOnUserLocation() {
+    final location = userLocation.value;
+    if (location != null) {
+      mapController.move(location, 4);
+      logger.d('Centered map on user location');
+    } else {
+      logger.w('No user location available to center on');
+    }
   }
 
   @override
