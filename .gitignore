@@ -39,6 +39,7 @@ build/
 .idea/
 .vscode/
 *.iml
+.env
 
 # Symbolication related
 app.*.symbols

@@ -4,8 +4,11 @@ import 'package:aurora_app/services/theme_service.dart';
 import 'package:flutter/material.dart';
 import 'package:aurora_app/config/theme/aurora_theme.dart';
 import 'package:get/get.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Ensures binding is ready
+  await dotenv.load(fileName: ".env"); // Wait for .env to load
   AppBindings().dependencies();
   runApp(const MyApp());
 }

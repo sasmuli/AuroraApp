@@ -6,6 +6,7 @@ import 'package:aurora_app/services/location_serivce.dart';
 import 'package:get/get.dart';
 import 'package:aurora_app/services/navigation_service.dart';
 import 'package:aurora_app/services/theme_service.dart';
+import 'package:aurora_app/services/aurora_service.dart';
 
 class AppBindings extends Bindings {
   @override
@@ -14,6 +15,7 @@ class AppBindings extends Bindings {
     Get.put(ThemeService());
     Get.put(NavigationService());
     Get.put<LocationService>(LocationService());
+    Get.put<AuroraService>(AuroraService());
 
     //Controllers
     Get.lazyPut<HomeController>(

@@ -1,6 +1,5 @@
 import 'package:aurora_app/logger.dart';
 import 'package:aurora_app/presentation/controllers/MapPage/map_card_controller.dart';
-import 'package:aurora_app/presentation/pages/MapPage/full_screen_map_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,26 +11,11 @@ class MapCard extends GetView<MapCardController> {
 
   @override
   Widget build(BuildContext context) {
-    // Log location data when building the map card
-    logger.i('[MapCard] Building with location: ${controller.latitude}, ${controller.longitude}');
-    
-    if (controller.locationService.hasLocation) {
-      final pos = controller.locationService.currentPosition.value!;
-      logger.i('[MapCard] Location accuracy: ${pos.accuracy}m, timestamp: ${pos.timestamp}');
-    } else {
-      logger.w('[MapCard] No location data available');
-    }
-    
     return Obx(
       () => GestureDetector(
         onTap: () {
           logger.i('[MapCard] Navigating to full screen map');
-          Get.to(
-            () => FullScreenMapPage(
-              initialLatitude: controller.latitude,
-              initialLongitude: controller.longitude,
-            ),
-          );
+          controller.toMapPage();
         },
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
