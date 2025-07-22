@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:aurora_app/logger.dart';
+import 'package:aurora_app/utils/constants/paddings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -48,11 +49,14 @@ class KpCardState extends State<KpCard> {
       valueListenable: refreshNotifier,
       builder: (context, _, __) {
         return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          padding: const EdgeInsets.all(16),
+          margin: const EdgeInsets.symmetric(
+            horizontal: largePadding,
+            vertical: smallPadding,
+          ),
+          padding: const EdgeInsets.all(largePadding),
           decoration: BoxDecoration(
             color: Get.theme.colorScheme.primary,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(mediumPadding),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -63,39 +67,26 @@ class KpCardState extends State<KpCard> {
                 height: 32,
                 colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: largePadding),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'KP Index ${widget.kpValue.toStringAsFixed(2)}',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                      style: Get.theme.textTheme.titleLarge,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: extraSmallPadding),
                     Text(
                       '${widget.chancePercentage}% chance of seeing the Northern Lights in your location',
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
-                    ),
-                    Text(
-                      widget.location,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                      style: Get.theme.textTheme.bodySmall,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'Updated ${_formatUpdateTime(widget.updateTime)}',
-                          style: const TextStyle(
-                            fontSize: 10,
+                          style: Get.theme.textTheme.labelSmall?.copyWith(
                             color: Colors.white70,
                           ),
                         ),

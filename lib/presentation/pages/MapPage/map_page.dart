@@ -1,6 +1,7 @@
 import 'package:aurora_app/presentation/controllers/MapPage/map_controller.dart';
 import 'package:aurora_app/presentation/widgets/MapPage/kp_card.dart';
 import 'package:aurora_app/presentation/widgets/MapPage/map_card.dart';
+import 'package:aurora_app/utils/constants/paddings.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,50 +30,48 @@ class MapPage extends GetView<MapController> {
                             controller.auroraData.value!.chancePercentage,
                         updateTime: controller.lastUpdateTime.value,
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: extraSmallPadding),
                       Text(
                         'Updates automatically every ${controller.updateIntervalMinutes} minutes',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[500],
-                          fontStyle: FontStyle.italic,
-                        ),
+                        style: Get.theme.textTheme.labelMedium,
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: largePadding),
                       MapCard(),
                     ],
                   )
-                : const Text('No data available'),
+                : Text(
+                    'No data available',
+                    style: Get.theme.textTheme.bodyLarge,
+                  ),
           ),
         ],
       ),
     );
   }
 
-  // Build the error widget
   Widget _buildErrorWidget() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: largePadding),
+      padding: const EdgeInsets.all(largePadding),
       decoration: BoxDecoration(
         color: Colors.red[100],
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(mediumPadding),
         border: Border.all(color: Colors.red),
       ),
       child: Column(
         children: [
           const Icon(Icons.error_outline, color: Colors.red, size: 36),
-          const SizedBox(height: 8),
+          const SizedBox(height: smallPadding),
           Obx(
             () => Text(
               controller.errorMessage.value,
-              style: const TextStyle(color: Colors.red),
+              style: Get.theme.textTheme.bodyLarge?.copyWith(color: Colors.red),
               textAlign: TextAlign.center,
             ),
           ),
           TextButton(
             onPressed: () => controller.refreshData(),
-            child: const Text('Try Again'),
+            child: Text('Try Again', style: Get.theme.textTheme.labelLarge),
           ),
         ],
       ),

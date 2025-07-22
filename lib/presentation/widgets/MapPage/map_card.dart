@@ -1,5 +1,6 @@
 import 'package:aurora_app/logger.dart';
 import 'package:aurora_app/presentation/controllers/MapPage/map_card_controller.dart';
+import 'package:aurora_app/utils/constants/paddings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,11 +19,16 @@ class MapCard extends GetView<MapCardController> {
           controller.toMapPage();
         },
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          margin: const EdgeInsets.symmetric(
+            horizontal: largePadding,
+            vertical: smallPadding,
+          ),
           height: height,
           width: width,
           clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(mediumPadding),
+          ),
           child: Stack(
             children: [
               Positioned.fill(child: _buildMapContent()),
@@ -31,7 +37,7 @@ class MapCard extends GetView<MapCardController> {
                 right: 0,
                 bottom: 0,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: mediumPadding),
                   color: const Color.fromARGB(94, 0, 0, 0),
                   child: Text(
                     'Aurora Map',
@@ -59,21 +65,23 @@ class MapCard extends GetView<MapCardController> {
     if (controller.errorMessage.value.isNotEmpty) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(largePadding),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(Icons.location_off, size: 48, color: Colors.grey),
-              const SizedBox(height: 16),
+              const SizedBox(height: largePadding),
               Text(
                 controller.errorMessage.value,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.grey),
+                style: Get.theme.textTheme.bodySmall?.copyWith(
+                  color: Colors.grey,
+                ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: largePadding),
               ElevatedButton(
                 onPressed: controller.retryLocationFetch,
-                child: const Text('Retry'),
+                child: Text('Retry', style: Get.theme.textTheme.labelLarge),
               ),
             ],
           ),
@@ -104,11 +112,13 @@ class MapCard extends GetView<MapCardController> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(Icons.error_outline, size: 48, color: Colors.red),
-              const SizedBox(height: 16),
-              const Text(
+              const SizedBox(height: largePadding),
+              Text(
                 'Unable to load map',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey),
+                style: Get.theme.textTheme.bodyLarge?.copyWith(
+                  color: Colors.grey,
+                ),
               ),
             ],
           ),

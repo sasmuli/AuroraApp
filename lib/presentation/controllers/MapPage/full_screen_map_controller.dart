@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:aurora_app/domain/models/aurora_marker.dart';
 import 'package:aurora_app/domain/repositories/aurora_repository.dart';
 import 'package:aurora_app/logger.dart';
@@ -21,6 +22,7 @@ class FullScreenMapController extends GetxController
 
   late TabController tabController;
   final List<String> tabLabels = ['Aurora', 'Clouds', 'All'];
+  Timer? _refreshTimer;
 
   @override
   void onInit() {
@@ -31,6 +33,7 @@ class FullScreenMapController extends GetxController
       onTabChanged(tabController.index);
     });
     fetchAuroraData();
+    _startAutoRefresh();
   }
 
   Future<void> fetchAuroraData() async {
@@ -56,12 +59,17 @@ class FullScreenMapController extends GetxController
     logger.d('Tab changed to: ${tabLabels[index]}');
   }
 
-  Future<void> refreshData() async {
-    await fetchAuroraData();
+  void _startAutoRefresh() {
+    _refreshTimer = Timer.periodic(const Duration(minutes: 10), (timer) {
+      logger.i('Auto-refreshing aurora data');
+      fetchAuroraData();
+    });
+    logger.i('Auto-refresh started: data will refresh every 10 minutes');
   }
 
   @override
   void onClose() {
+    _refreshTimer?.cancel();
     tabController.dispose();
     super.onClose();
   }

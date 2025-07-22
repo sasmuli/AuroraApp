@@ -1,3 +1,4 @@
+import 'package:aurora_app/utils/constants/paddings.dart';
 import 'package:flutter/material.dart';
 
 class AuroraTheme {
@@ -72,29 +73,15 @@ class AuroraTheme {
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
-      textTheme: TextTheme(
-        displayLarge: TextStyle(color: _textPrimaryLight),
-        displayMedium: TextStyle(color: _textPrimaryLight),
-        displaySmall: TextStyle(color: _textPrimaryLight),
-        headlineLarge: TextStyle(color: _textPrimaryLight),
-        headlineMedium: TextStyle(color: _textPrimaryLight),
-        headlineSmall: TextStyle(color: _textPrimaryLight),
-        titleLarge: TextStyle(color: _textPrimaryLight),
-        titleMedium: TextStyle(color: _textPrimaryLight),
-        titleSmall: TextStyle(color: _textPrimaryLight),
-        bodyLarge: TextStyle(color: _textPrimaryLight),
-        bodyMedium: TextStyle(color: _textPrimaryLight),
-        bodySmall: TextStyle(color: _textSecondaryLight),
-        labelLarge: TextStyle(color: _textPrimaryLight),
-        labelMedium: TextStyle(color: _textPrimaryLight),
-        labelSmall: TextStyle(color: _textSecondaryLight),
-      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: _primaryLight,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(
+            horizontal: largePadding,
+            vertical: 12,
+          ),
         ),
       ),
     );
@@ -161,7 +148,7 @@ class AuroraTheme {
         ),
         bodySmall: TextStyle(
           fontSize: 12,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w400,
           color: Colors.white,
         ),
         bodyLarge: TextStyle(
@@ -180,10 +167,15 @@ class AuroraTheme {
           fontStyle: FontStyle.italic,
           color: Colors.grey,
         ),
+        labelSmall: TextStyle(
+          fontSize: 10,
+          fontWeight: FontWeight.w500,
+          color: Colors.white,
+        ),
         titleLarge: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w700,
-          color: Colors.black,
+          color: Colors.white,
         ),
         titleMedium: TextStyle(
           fontSize: 16,

@@ -1,4 +1,5 @@
 import 'package:aurora_app/presentation/controllers/home_controller.dart';
+import 'package:aurora_app/utils/constants/paddings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:aurora_app/presentation/widgets/bottom_nav_bar.dart';
@@ -14,16 +15,21 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Obx(() => Text(controller.currentTitle)),
+        title: Obx(
+          () => Text(
+            controller.currentTitle,
+            style: Get.theme.textTheme.titleLarge,
+          ),
+        ),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.settings),
           onPressed: controller.openSettings,
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(smallPadding),
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 8.0),
+            padding: const EdgeInsets.only(right: smallPadding),
             child: Obx(
               () => IconButton(
                 icon: Icon(
