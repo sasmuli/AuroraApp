@@ -1,23 +1,25 @@
 import 'dart:io';
+
 import 'package:aurora_app/presentation/pages/MapPage/full_screen_map_page.dart';
-import 'package:aurora_app/services/location_serivce.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:latlong2/latlong.dart';
+
+import '../../../domain/repositories/location_repository.dart';
+import '../../../logger.dart';
 
 class MapCardController extends GetxController {
-  MapCardController({required this.locationService});
+  MapCardController({required this.locationRepository});
+
+  final LocationRepository locationRepository;
+
   static const int defaultZoom = 3;
+  static const LatLng defaultLocation = LatLng(65.0, 25.0);
+
   final RxBool isLoading = true.obs;
   final RxString errorMessage = ''.obs;
   final RxString apiKey = ''.obs;
-  final LocationService locationService;
-  double get latitude => locationService.hasLocation
-      ? locationService.latitude
-      : LocationService.defaultLatitude;
-
-  double get longitude => locationService.hasLocation
-      ? locationService.longitude
-      : LocationService.defaultLongitude;
+  final Rx<LatLng> currentLocation = defaultLocation.obs;
 
   @override
   void onInit() {
@@ -25,61 +27,47 @@ class MapCardController extends GetxController {
     apiKey.value = Platform.isAndroid
         ? dotenv.env['ANDROID_MAP_API_KEY'] ?? ''
         : dotenv.env['IOS_MAP_API_KEY'] ?? '';
-    initializeLocation();
+
+    _initializeLocation();
+  }
+
+  void _initializeLocation() async {
+    isLoading.value = true;
+    errorMessage.value = '';
+
+    try {
+      final location = await locationRepository.getCurrentLocation();
+
+      if (location != null) {
+        currentLocation.value = location;
+        logger.i('[MapCardController] Location set: $location');
+      } else {
+        logger.w('[MapCardController] Location is null, using default');
+      }
+    } catch (e) {
+      errorMessage.value = 'Failed to get location: $e';
+      logger.e('[MapCardController] Error: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void retryLocationFetch() {
+    _initializeLocation();
   }
 
   void toMapPage() {
     Get.to(
       () => FullScreenMapPage(
-        initialLatitude: latitude,
-        initialLongitude: longitude,
+        initialLatitude: currentLocation.value.latitude,
+        initialLongitude: currentLocation.value.longitude,
       ),
     );
   }
 
-  void initializeLocation() {
-    isLoading.value = true;
-    errorMessage.value = '';
-
-    if (!locationService.hasLocation) {
-      locationService
-          .getUserLocation()
-          .then((position) {
-            isLoading.value = false;
-            if (locationService.errorMessage.isNotEmpty) {
-              errorMessage.value = locationService.errorMessage.value;
-            }
-          })
-          .catchError((e) {
-            errorMessage.value = 'Failed to get location: $e';
-            isLoading.value = false;
-          });
-    } else {
-      isLoading.value = false;
-    }
-    _setupLocationListeners();
-  }
-
-  void _setupLocationListeners() {
-    ever(locationService.isLoading, (loading) {
-      isLoading.value = loading;
-    });
-
-    ever(locationService.errorMessage, (error) {
-      if (error.isNotEmpty) {
-        errorMessage.value = error;
-      }
-    });
-  }
-
-  void retryLocationFetch() {
-    isLoading.value = true;
-    errorMessage.value = '';
-    locationService.getUserLocation();
-  }
-
-  // Get the map URL for the current location
   String getMapUrl(double width, double height) {
+    final LatLng location = currentLocation.value;
+
     final List<String> styleParams = [
       'element:geometry|color:0x1d2c4d',
       'element:labels.text.fill|color:0x8ec3b9',
@@ -113,15 +101,12 @@ class MapCardController extends GetxController {
         .map((e) => '&style=${Uri.encodeComponent(e)}')
         .join();
 
-    final url =
-        'https://maps.googleapis.com/maps/api/staticmap?'
-        'center=$latitude,$longitude'
+    return 'https://maps.googleapis.com/maps/api/staticmap?'
+        'center=${location.latitude},${location.longitude}'
         '&zoom=$defaultZoom'
         '&size=${width.toInt()}x${height.toInt()}'
         '&maptype=roadmap'
         '$encodedStyles'
         '&key=${apiKey.value}';
-
-    return url;
   }
 }
