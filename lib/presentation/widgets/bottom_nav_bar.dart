@@ -1,4 +1,4 @@
-import 'package:aurora_app/domain/models/aurora_data.dart';
+import 'package:aurora_app/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:aurora_app/services/navigation_service.dart';

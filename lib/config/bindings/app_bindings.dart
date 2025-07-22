@@ -1,12 +1,20 @@
+import 'package:aurora_app/data/data_sources/aurora_data_source.dart';
+import 'package:aurora_app/data/data_sources/aurora_probability_data_source.dart';
+import 'package:aurora_app/data/data_sources/location_data_source.dart';
+import 'package:aurora_app/data/repository_impls/aurora_probability_repository_impl.dart';
+import 'package:aurora_app/data/repository_impls/aurora_repository_impls.dart';
+import 'package:aurora_app/data/repository_impls/location_repository_impl.dart';
+import 'package:aurora_app/domain/repositories/aurora_probability_repository.dart';
+import 'package:aurora_app/domain/repositories/aurora_repository.dart';
+import 'package:aurora_app/domain/repositories/location_repository.dart';
 import 'package:aurora_app/presentation/controllers/MapPage/full_screen_map_controller.dart';
 import 'package:aurora_app/presentation/controllers/MapPage/map_controller.dart';
 import 'package:aurora_app/presentation/controllers/MapPage/map_card_controller.dart';
 import 'package:aurora_app/presentation/controllers/home_controller.dart';
-import 'package:aurora_app/services/location_serivce.dart';
 import 'package:get/get.dart';
 import 'package:aurora_app/services/navigation_service.dart';
 import 'package:aurora_app/services/theme_service.dart';
-import 'package:aurora_app/services/aurora_service.dart';
+import 'package:http/http.dart' as http;
 
 class AppBindings extends Bindings {
   @override
@@ -14,8 +22,31 @@ class AppBindings extends Bindings {
     //Services
     Get.put(ThemeService());
     Get.put(NavigationService());
-    Get.put<LocationService>(LocationService());
-    Get.put<AuroraService>(AuroraService());
+
+    //Http Client
+    Get.put(http.Client());
+
+    //DataSources
+    Get.put<AuroraRemoteDataSource>(
+      AuroraRemoteDataSourceImpl(Get.find<http.Client>()),
+    );
+
+    Get.put<AuroraProbabilityDataSource>(AuroraProbabilityDataSourceImpl());
+
+    Get.put<LocationDataSource>(LocationDataSourceImpl());
+
+    //Repositories Imps
+    Get.put<AuroraRepository>(
+      AuroraRepositoryImpl(Get.find<AuroraRemoteDataSource>()),
+    );
+
+    Get.put<LocationRepository>(
+      LocationRepositoryImpl(Get.find<LocationDataSource>()),
+    );
+
+    Get.put<AuroraProbabilityRepository>(
+      AuroraProbabilityRepositoryImpl(Get.find<AuroraProbabilityDataSource>()),
+    );
 
     //Controllers
     Get.lazyPut<HomeController>(
@@ -29,12 +60,13 @@ class AppBindings extends Bindings {
     Get.lazyPut<MapController>(() => MapController(), fenix: true);
 
     Get.lazyPut<MapCardController>(
-      () => MapCardController(locationService: Get.find<LocationService>()),
+      () =>
+          MapCardController(locationRepository: Get.find<LocationRepository>()),
       fenix: true,
     );
 
     Get.lazyPut<FullScreenMapController>(
-      () => FullScreenMapController(),
+      () => FullScreenMapController(Get.find<AuroraRepository>()),
       fenix: true,
     );
   }
