@@ -34,7 +34,7 @@ class AuroraRemoteDataSourceImpl implements AuroraRemoteDataSource {
     final List<dynamic> coordinates = data['coordinates'] ?? [];
     final List<AuroraMarker> markers = [];
 
-    const int sampleRate = 4;
+    const int sampleRate = 8;
 
     for (int i = 0; i < coordinates.length; i += sampleRate) {
       final coord = coordinates[i];

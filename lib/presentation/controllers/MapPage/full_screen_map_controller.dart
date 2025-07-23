@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:aurora_app/domain/models/aurora_marker.dart';
 import 'package:aurora_app/domain/repositories/aurora_repository.dart';
+import 'package:aurora_app/domain/repositories/cloud_repository.dart';
 import 'package:aurora_app/logger.dart';
+import 'package:aurora_app/presentation/pages/MapPage/forecat_images_page.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -10,8 +12,9 @@ import 'package:latlong2/latlong.dart';
 class FullScreenMapController extends GetxController
     with GetSingleTickerProviderStateMixin {
   final AuroraRepository auroraRepository;
+  final CloudRepository cloudRepository;
 
-  FullScreenMapController(this.auroraRepository);
+  FullScreenMapController(this.auroraRepository, this.cloudRepository);
 
   final RxDouble latitude = 0.0.obs;
   final RxDouble longitude = 0.0.obs;
@@ -20,13 +23,17 @@ class FullScreenMapController extends GetxController
   final RxList<AuroraMarker> auroraMarkers = <AuroraMarker>[].obs;
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
-
   final Rxn<LatLng> userLocation = Rxn<LatLng>();
   final RxBool isLocationLoading = false.obs;
 
   late TabController tabController;
   final List<String> tabLabels = ['Aurora', 'Clouds', 'All'];
   Timer? _refreshTimer;
+
+  // Layer visibility state
+  final RxBool showAuroraLayer = true.obs;
+  final RxBool showCloudLayer = false.obs;
+  final RxString cloudTileUrl = ''.obs;
 
   @override
   void onInit() {
@@ -36,8 +43,9 @@ class FullScreenMapController extends GetxController
       if (tabController.indexIsChanging) return;
       onTabChanged(tabController.index);
     });
+    initializeCloudData();
     fetchAuroraData();
-    _startAutoRefresh();
+    startAutoRefresh();
   }
 
   void initializeWithLocation(double lat, double lng) {
@@ -70,11 +78,39 @@ class FullScreenMapController extends GetxController
     }
   }
 
-  void onTabChanged(int index) {
-    logger.d('Tab changed to: ${tabLabels[index]}');
+  void initializeCloudData() {
+    try {
+      cloudTileUrl.value = cloudRepository.getCloudTiles();
+      logger.i('Cloud tile URL initialized: ${cloudTileUrl.value}');
+    } catch (e) {
+      logger.e('Error initializing cloud data: $e');
+    }
   }
 
-  void _startAutoRefresh() {
+  void onTabChanged(int index) {
+    logger.d('Tab changed to: ${tabLabels[index]}');
+
+    switch (index) {
+      case 0: // Aurora
+        showAuroraLayer.value = true;
+        showCloudLayer.value = false;
+        break;
+      case 1: // Clouds
+        showAuroraLayer.value = false;
+        showCloudLayer.value = true;
+        break;
+      case 2: // All
+        showAuroraLayer.value = true;
+        showCloudLayer.value = true;
+        break;
+    }
+
+    logger.i(
+      'Layer visibility - Aurora: ${showAuroraLayer.value}, Clouds: ${showCloudLayer.value}',
+    );
+  }
+
+  void startAutoRefresh() {
     _refreshTimer = Timer.periodic(const Duration(minutes: 10), (timer) {
       logger.i('Auto-refreshing aurora data');
 
@@ -91,6 +127,10 @@ class FullScreenMapController extends GetxController
     } else {
       logger.w('No user location available to center on');
     }
+  }
+
+  void navigateToForecastImages() {
+    Get.to(() => const ForecastImagesPage());
   }
 
   @override

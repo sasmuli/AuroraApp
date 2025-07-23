@@ -49,5 +49,10 @@
 	<string>This app needs access to location to show aurora forecast for your current location.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app needs access to location to show aurora forecast for your current location.</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>http</string>
+		<string>https</string>
+	</array>
 </dict>
 </plist>

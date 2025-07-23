@@ -1,12 +1,16 @@
 import 'package:aurora_app/data/data_sources/aurora_data_source.dart';
 import 'package:aurora_app/data/data_sources/aurora_probability_data_source.dart';
+import 'package:aurora_app/data/data_sources/cloud_data_source.dart';
 import 'package:aurora_app/data/data_sources/location_data_source.dart';
 import 'package:aurora_app/data/repository_impls/aurora_probability_repository_impl.dart';
 import 'package:aurora_app/data/repository_impls/aurora_repository_impls.dart';
+import 'package:aurora_app/data/repository_impls/cloud_repository_impls.dart';
 import 'package:aurora_app/data/repository_impls/location_repository_impl.dart';
 import 'package:aurora_app/domain/repositories/aurora_probability_repository.dart';
 import 'package:aurora_app/domain/repositories/aurora_repository.dart';
+import 'package:aurora_app/domain/repositories/cloud_repository.dart';
 import 'package:aurora_app/domain/repositories/location_repository.dart';
+import 'package:aurora_app/presentation/controllers/MapPage/forecast_images_controller.dart';
 import 'package:aurora_app/presentation/controllers/MapPage/full_screen_map_controller.dart';
 import 'package:aurora_app/presentation/controllers/MapPage/map_controller.dart';
 import 'package:aurora_app/presentation/controllers/MapPage/map_card_controller.dart';
@@ -35,6 +39,8 @@ class AppBindings extends Bindings {
 
     Get.put<LocationDataSource>(LocationDataSourceImpl());
 
+    Get.put<CloudDataSource>(CloudDataSourceImpl());
+
     //Repositories Imps
     Get.put<AuroraRepository>(
       AuroraRepositoryImpl(Get.find<AuroraRemoteDataSource>()),
@@ -47,6 +53,8 @@ class AppBindings extends Bindings {
     Get.put<AuroraProbabilityRepository>(
       AuroraProbabilityRepositoryImpl(Get.find<AuroraProbabilityDataSource>()),
     );
+
+    Get.put<CloudRepository>(CloudRepositoryImpl(Get.find<CloudDataSource>()));
 
     //Controllers
     Get.lazyPut<HomeController>(
@@ -68,7 +76,13 @@ class AppBindings extends Bindings {
     Get.lazyPut<FullScreenMapController>(
       () => FullScreenMapController(
         Get.find<AuroraRepository>(),
+        Get.find<CloudRepository>(),
       ),
+      fenix: true,
+    );
+
+    Get.lazyPut<ForecastImagesController>(
+      () => ForecastImagesController(),
       fenix: true,
     );
   }

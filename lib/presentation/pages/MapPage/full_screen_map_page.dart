@@ -60,7 +60,7 @@ class FullScreenMapPage extends GetView<FullScreenMapController> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.image_outlined),
-                  onPressed: () {},
+                  onPressed: () => controller.navigateToForecastImages(),
                   tooltip: 'Gallery',
                   padding: EdgeInsets.zero,
                   visualDensity: VisualDensity.compact,
@@ -138,29 +138,50 @@ class FullScreenMapPage extends GetView<FullScreenMapController> {
                       'attribution': '© OpenStreetMap contributors © CARTO',
                     },
                   ),
-                  // Aurora markers layer
-                  MarkerLayer(
-                    markers: controller.auroraMarkers.map((auroraMarker) {
-                      return Marker(
-                        point: LatLng(
-                          auroraMarker.latitude,
-                          auroraMarker.longitude,
-                        ),
-                        width: 32,
-                        height: 32,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: auroraMarker.color,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: auroraMarker.color.withValues(alpha: 1.0),
-                              width: 0.5,
+                  // Cloud layer
+                  Obx(() {
+                    if (!controller.showCloudLayer.value ||
+                        controller.cloudTileUrl.value.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
+                    return TileLayer(
+                      urlTemplate: controller.cloudTileUrl.value,
+                      userAgentPackageName: 'com.example.aurora_app',
+                      additionalOptions: const {
+                        'attribution': '© OpenWeatherMap',
+                      },
+                    );
+                  }),
+                  // Aurora layer
+                  Obx(() {
+                    if (!controller.showAuroraLayer.value) {
+                      return const SizedBox.shrink();
+                    }
+                    return MarkerLayer(
+                      markers: controller.auroraMarkers.map((auroraMarker) {
+                        return Marker(
+                          point: LatLng(
+                            auroraMarker.latitude,
+                            auroraMarker.longitude,
+                          ),
+                          width: 48,
+                          height: 48,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: auroraMarker.color,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: auroraMarker.color.withValues(
+                                  alpha: 1.0,
+                                ),
+                                width: 0.5,
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
+                        );
+                      }).toList(),
+                    );
+                  }),
                   Obx(() {
                     final userLoc = controller.userLocation.value;
                     if (userLoc == null) return const SizedBox.shrink();
@@ -207,14 +228,7 @@ class FullScreenMapPage extends GetView<FullScreenMapController> {
             onPressed: controller.centerOnUserLocation,
             backgroundColor: Theme.of(context).primaryColor,
             child: controller.isLocationLoading.value
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  )
+                ? const SizedBox(width: 10, height: 10)
                 : const Icon(Icons.my_location, color: Colors.white),
           );
         }),
