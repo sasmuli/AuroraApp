@@ -32,11 +32,12 @@ class AuroraTheme {
   static const Color _textSecondaryLight = Color(0xFF757575);
   static const Color _textSecondaryDark = Color(0xFFBDBDBD);
 
-  // Aurora-specific colors (for aurora borealis theme)
   static const Color auroraGreen = Color(0xFF26D07C);
   static const Color auroraBlue = Color(0xFF1A88FF);
   static const Color auroraPurple = Color(0xFF8A4EFF);
   static const Color auroraPink = Color(0xFFFF4E8A);
+  static const Color auroraOrange = Color(0xFFFF9800);
+  static const Color auroraRed = Color(0xFFFF5252);
 
   // Light theme
   static ThemeData get lightTheme {
@@ -54,6 +55,7 @@ class AuroraTheme {
         onError: Colors.white,
         surface: _surfaceLight,
         onSurface: _textPrimaryLight,
+        onSurfaceVariant: Colors.grey,
       ),
       scaffoldBackgroundColor: _backgroundLight,
       appBarTheme: AppBarTheme(
@@ -103,6 +105,7 @@ class AuroraTheme {
         onError: Colors.black,
         surface: _surfaceDark,
         onSurface: _textPrimaryDark,
+        onSurfaceVariant: Colors.grey,
       ),
       scaffoldBackgroundColor: _backgroundDark,
       appBarTheme: AppBarTheme(

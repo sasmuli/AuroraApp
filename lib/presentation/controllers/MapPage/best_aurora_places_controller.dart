@@ -21,6 +21,8 @@ class BestAuroraPlacesController extends GetxController {
 
   final RxList<AuroraViewingLocation> bestAuroraPlaces =
       <AuroraViewingLocation>[].obs;
+  final RxList<AuroraViewingLocation> allAuroraPlaces =
+      <AuroraViewingLocation>[].obs;
   final RxBool isLoading = true.obs;
   final RxString errorMessage = ''.obs;
 
@@ -28,6 +30,11 @@ class BestAuroraPlacesController extends GetxController {
 
   // Timer for automatic updates every 5 minutes
   Timer? _updateTimer;
+
+  // Filter properties
+  final RxList<String> selectedCountries = <String>[].obs;
+  final RxList<String> availableCountries = <String>[].obs;
+  final RxDouble minProbability = 10.0.obs;
 
   LatLng get initialCameraTarget {
     final current = mapController_.currentLocation.value;
@@ -93,16 +100,22 @@ class BestAuroraPlacesController extends GetxController {
         );
       }
 
-      final filteredPlaces = placesWithProbabilities
-          .where((place) => place.probability >= 10.0)
-          .toList();
+      // Store all places with probabilities
+      allAuroraPlaces.value = placesWithProbabilities;
 
-      filteredPlaces.sort((a, b) => b.probability.compareTo(a.probability));
-      bestAuroraPlaces.value = filteredPlaces.take(30).toList();
-      logger.i(
-        'Filtered to ${filteredPlaces.length} places with >=10% probability',
-      );
-      logger.i('Final list has ${bestAuroraPlaces.length} places');
+      // Extract available countries
+      final countries = placesWithProbabilities
+          .map((place) => place.country)
+          .toSet()
+          .toList();
+      countries.sort();
+      availableCountries.value = countries;
+
+      // Apply filters
+      applyFilters();
+      logger.i('Loaded ${allAuroraPlaces.length} places with probabilities');
+      logger.i('Available countries: ${availableCountries.join(", ")}');
+      logger.i('Final filtered list has ${bestAuroraPlaces.length} places');
 
       createMarkers();
     } catch (e) {
@@ -206,6 +219,47 @@ class BestAuroraPlacesController extends GetxController {
       'assets/map_styles/dark_map.json',
     );
     styleString.value = style;
+  }
+
+  void applyFilters() {
+    List<AuroraViewingLocation> filtered = allAuroraPlaces.toList();
+
+    filtered = filtered
+        .where((place) => place.probability >= minProbability.value)
+        .toList();
+
+    if (selectedCountries.isNotEmpty) {
+      filtered = filtered
+          .where((place) => selectedCountries.contains(place.country))
+          .toList();
+    }
+
+    filtered.sort((a, b) => b.probability.compareTo(a.probability));
+
+    bestAuroraPlaces.value = filtered.take(30).toList();
+
+    logger.i(
+      'Applied filters: minProbability=${minProbability.value}%, countries=${selectedCountries.join(", ")}',
+    );
+    logger.i('Filtered results: ${bestAuroraPlaces.length} places');
+
+    createMarkers();
+  }
+
+  void updateCountryFilter(List<String> countries) {
+    selectedCountries.value = countries;
+    applyFilters();
+  }
+
+  void updateProbabilityFilter(double minProb) {
+    minProbability.value = minProb;
+    applyFilters();
+  }
+
+  void clearFilters() {
+    selectedCountries.clear();
+    minProbability.value = 10.0;
+    applyFilters();
   }
 
   void startAutoUpdate() {
