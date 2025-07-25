@@ -71,6 +71,8 @@ flutter:
   assets:
     - assets/aurora.svg
     - assets/map_styles/dark_map.json
+    - assets/aurora_pic.jpg
+    - aurora_places.json
     - .env
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

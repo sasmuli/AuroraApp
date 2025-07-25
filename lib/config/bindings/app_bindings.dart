@@ -10,6 +10,7 @@ import 'package:aurora_app/domain/repositories/aurora_probability_repository.dar
 import 'package:aurora_app/domain/repositories/aurora_repository.dart';
 import 'package:aurora_app/domain/repositories/cloud_repository.dart';
 import 'package:aurora_app/domain/repositories/location_repository.dart';
+import 'package:aurora_app/presentation/controllers/MapPage/best_aurora_places_controller.dart';
 import 'package:aurora_app/presentation/controllers/MapPage/forecast_images_controller.dart';
 import 'package:aurora_app/presentation/controllers/MapPage/full_screen_map_controller.dart';
 import 'package:aurora_app/presentation/controllers/MapPage/map_controller.dart';
@@ -83,6 +84,11 @@ class AppBindings extends Bindings {
 
     Get.lazyPut<ForecastImagesController>(
       () => ForecastImagesController(),
+      fenix: true,
+    );
+
+    Get.lazyPut<BestAuroraPlacesController>(
+      () => BestAuroraPlacesController(),
       fenix: true,
     );
   }

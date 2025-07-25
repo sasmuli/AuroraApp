@@ -26,10 +26,10 @@ class ForecastImagesController extends GetxController {
     },
   ];
 
-  final refreshKey = RxInt(0); // Triggers rebuild
+  final refreshKey = RxInt(0);
 
   void reloadImages() {
-    refreshKey.value++; // Triggers cache-busting
+    refreshKey.value++;
   }
 
   void openInFullscreen(String url) {

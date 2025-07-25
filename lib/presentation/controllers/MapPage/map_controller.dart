@@ -41,6 +41,7 @@ class MapController extends GetxController {
   }
 
   Future<void> _fetchLocation() async {
+    logger.i('[MapController] Fetching current location...');
     final location = await _locationRepository.getCurrentLocation();
     if (location != null) {
       currentLocation.value = location;
@@ -53,6 +54,7 @@ class MapController extends GetxController {
   }
 
   Future<void> fetchAuroraData() async {
+    logger.i('[MapController] Fetching aurora data...');
     isLoading.value = true;
     errorMessage.value = '';
 

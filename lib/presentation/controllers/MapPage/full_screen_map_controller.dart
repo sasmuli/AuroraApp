@@ -88,7 +88,7 @@ class FullScreenMapController extends GetxController
   }
 
   void onTabChanged(int index) {
-    logger.d('Tab changed to: ${tabLabels[index]}');
+    logger.i('Tab changed to: ${tabLabels[index]}');
 
     switch (index) {
       case 0: // Aurora
@@ -123,7 +123,7 @@ class FullScreenMapController extends GetxController
     final location = userLocation.value;
     if (location != null) {
       mapController.move(location, 4);
-      logger.d('Centered map on user location');
+      logger.i('Centered map on user location');
     } else {
       logger.w('No user location available to center on');
     }

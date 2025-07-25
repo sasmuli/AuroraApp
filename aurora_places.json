@@ -1,0 +1,779 @@
+{
+    "Canada": [
+        {
+            "name": "Yellowknife",
+            "latitude": 62.4539,
+            "longitude": -114.3718
+        },
+        {
+            "name": "Churchill",
+            "latitude": 58.7684,
+            "longitude": -94.1650
+        },
+        {
+            "name": "Fort McMurray",
+            "latitude": 56.7267,
+            "longitude": -111.3790
+        },
+        {
+            "name": "Rankin Inlet",
+            "latitude": 62.8084,
+            "longitude": -92.0857
+        },
+        {
+            "name": "Pangnirtung",
+            "latitude": 66.1451,
+            "longitude": -65.7127
+        },
+        {
+            "name": "Clyde River",
+            "latitude": 70.4692,
+            "longitude": -68.5911
+        },
+        {
+            "name": "Fort Good Hope",
+            "latitude": 66.2668,
+            "longitude": -128.6345
+        },
+        {
+            "name": "Tuktoyaktuk",
+            "latitude": 69.4456,
+            "longitude": -133.0265
+        },
+        {
+            "name": "Norman Wells",
+            "latitude": 65.2815,
+            "longitude": -126.8324
+        },
+        {
+            "name": "Deline",
+            "latitude": 65.1883,
+            "longitude": -123.4181
+        },
+        {
+            "name": "Baker Lake",
+            "latitude": 64.3141,
+            "longitude": -96.0312
+        },
+        {
+            "name": "Igloolik",
+            "latitude": 69.3841,
+            "longitude": -81.7997
+        },
+        {
+            "name": "Iqaluit",
+            "latitude": 63.7467,
+            "longitude": -68.5167
+        },
+        {
+            "name": "Inuvik",
+            "latitude": 68.3607,
+            "longitude": -133.7218
+        },
+        {
+            "name": "Cambridge Bay",
+            "latitude": 69.1136,
+            "longitude": -105.0536
+        },
+        {
+            "name": "Resolute",
+            "latitude": 74.6973,
+            "longitude": -94.8292
+        },
+        {
+            "name": "Arviat",
+            "latitude": 61.1086,
+            "longitude": -94.0624
+        },
+        {
+            "name": "Taloyoak",
+            "latitude": 69.5376,
+            "longitude": -93.5254
+        },
+        {
+            "name": "Kugluktuk",
+            "latitude": 67.8291,
+            "longitude": -115.0964
+        },
+        {
+            "name": "Gjoa Haven",
+            "latitude": 68.6356,
+            "longitude": -95.8492
+        }
+    ],
+    "Finland": [
+        {
+            "name": "Rovaniemi",
+            "latitude": 66.5039,
+            "longitude": 25.7294
+        },
+        {
+            "name": "Ivalo",
+            "latitude": 68.6626,
+            "longitude": 27.5391
+        },
+        {
+            "name": "Inari",
+            "latitude": 68.9053,
+            "longitude": 27.0279
+        },
+        {
+            "name": "Kittilä",
+            "latitude": 67.6626,
+            "longitude": 24.9114
+        },
+        {
+            "name": "Enontekiö",
+            "latitude": 68.3857,
+            "longitude": 23.6323
+        },
+        {
+            "name": "Pello",
+            "latitude": 66.7757,
+            "longitude": 24.0612
+        },
+        {
+            "name": "Saariselkä",
+            "latitude": 68.4211,
+            "longitude": 27.4219
+        },
+        {
+            "name": "Ruka",
+            "latitude": 66.1682,
+            "longitude": 29.1449
+        },
+        {
+            "name": "Sodankylä",
+            "latitude": 67.4112,
+            "longitude": 26.5929
+        },
+        {
+            "name": "Oulu",
+            "latitude": 65.0121,
+            "longitude": 25.4651
+        },
+        {
+            "name": "Kemi",
+            "latitude": 65.7370,
+            "longitude": 24.5636
+        },
+        {
+            "name": "Sirkka",
+            "latitude": 67.8110,
+            "longitude": 24.8053
+        },
+        {
+            "name": "Puolanka",
+            "latitude": 65.0434,
+            "longitude": 27.6720
+        },
+        {
+            "name": "Vuotso",
+            "latitude": 68.0591,
+            "longitude": 26.8387
+        },
+        {
+            "name": "Salla",
+            "latitude": 66.8333,
+            "longitude": 28.6666
+        },
+        {
+            "name": "Kemijärvi",
+            "latitude": 66.7137,
+            "longitude": 27.4316
+        },
+        {
+            "name": "Muonio",
+            "latitude": 67.9485,
+            "longitude": 23.6907
+        },
+        {
+            "name": "Ranua",
+            "latitude": 65.9249,
+            "longitude": 26.5034
+        },
+        {
+            "name": "Pudasjärvi",
+            "latitude": 65.4025,
+            "longitude": 26.9315
+        },
+        {
+            "name": "Tervola",
+            "latitude": 66.0747,
+            "longitude": 24.8033
+        },
+        {
+            "name": "Kilpisjärvi",
+            "latitude": 69.0214,
+            "longitude": 20.7922
+        },
+        {
+            "name": "Pokka",
+            "latitude": 68.1444,
+            "longitude": 24.1675
+        },
+        {
+            "name": "Savukoski",
+            "latitude": 67.2832,
+            "longitude": 28.1513
+        },
+        {
+            "name": "Ylläsjärvi",
+            "latitude": 67.5833,
+            "longitude": 24.2333
+        }
+    ],
+    "Greenland": [
+        {
+            "name": "Kangerlussuaq",
+            "latitude": 67.0121,
+            "longitude": -50.7111
+        },
+        {
+            "name": "Tasiilaq",
+            "latitude": 65.6140,
+            "longitude": -37.6365
+        },
+        {
+            "name": "Nuuk",
+            "latitude": 64.1814,
+            "longitude": -51.6941
+        },
+        {
+            "name": "Tasiusaq",
+            "latitude": 70.2283,
+            "longitude": -52.8706
+        },
+        {
+            "name": "Ilulissat",
+            "latitude": 69.2154,
+            "longitude": -51.0986
+        },
+        {
+            "name": "Sisimiut",
+            "latitude": 66.9395,
+            "longitude": -53.6736
+        },
+        {
+            "name": "Uummannaq",
+            "latitude": 70.6769,
+            "longitude": -52.1256
+        },
+        {
+            "name": "Qaanaaq",
+            "latitude": 77.4840,
+            "longitude": -69.3365
+        }
+    ],
+    "Iceland": [
+        {
+            "name": "Reykjavík",
+            "latitude": 64.1265,
+            "longitude": -21.8174
+        },
+        {
+            "name": "Husavik",
+            "latitude": 66.0440,
+            "longitude": -17.3389
+        },
+        {
+            "name": "Akureyri",
+            "latitude": 65.6885,
+            "longitude": -18.1262
+        },
+        {
+            "name": "Selfoss",
+            "latitude": 63.9330,
+            "longitude": -20.9971
+        },
+        {
+            "name": "Grímsey",
+            "latitude": 66.5450,
+            "longitude": -18.0167
+        },
+        {
+            "name": "Djúpivogur",
+            "latitude": 64.6541,
+            "longitude": -14.2886
+        },
+        {
+            "name": "Seyðisfjörður",
+            "latitude": 65.2645,
+            "longitude": -13.9185
+        },
+        {
+            "name": "Egilsstaðir",
+            "latitude": 65.2669,
+            "longitude": -14.3949
+        },
+        {
+            "name": "Stykkishólmur",
+            "latitude": 65.0751,
+            "longitude": -22.7261
+        },
+        {
+            "name": "Ísafjörður",
+            "latitude": 66.0759,
+            "longitude": -23.1200
+        },
+        {
+            "name": "Vík í Mýrdal",
+            "latitude": 63.4181,
+            "longitude": -18.9990
+        },
+        {
+            "name": "Höfn",
+            "latitude": 64.2539,
+            "longitude": -15.2139
+        },
+        {
+            "name": "Blönduós",
+            "latitude": 65.6599,
+            "longitude": -20.2819
+        },
+        {
+            "name": "Borgarnes",
+            "latitude": 64.5384,
+            "longitude": -21.9189
+        },
+        {
+            "name": "Hveragerði",
+            "latitude": 64.0010,
+            "longitude": -21.1900
+        },
+        {
+            "name": "Skógar",
+            "latitude": 63.5253,
+            "longitude": -19.5110
+        },
+        {
+            "name": "Snæfellsnes Peninsula",
+            "latitude": 64.8333,
+            "longitude": -23.3833
+        },
+        {
+            "name": "Reykjanesbær",
+            "latitude": 63.9998,
+            "longitude": -22.5478
+        },
+        {
+            "name": "Thingvellir National Park",
+            "latitude": 64.2559,
+            "longitude": -21.1295
+        },
+        {
+            "name": "Ásbyrgi Canyon",
+            "latitude": 66.0117,
+            "longitude": -16.5053
+        }
+    ],
+    "Norway": [
+        {
+            "name": "Tromsø",
+            "latitude": 69.6496,
+            "longitude": 18.9560
+        },
+        {
+            "name": "Alta",
+            "latitude": 69.9689,
+            "longitude": 23.2716
+        },
+        {
+            "name": "Bodø",
+            "latitude": 67.2804,
+            "longitude": 14.4049
+        },
+        {
+            "name": "Vadsø",
+            "latitude": 70.0730,
+            "longitude": 29.7496
+        },
+        {
+            "name": "Kautokeino",
+            "latitude": 69.0121,
+            "longitude": 23.0411
+        },
+        {
+            "name": "Hammerfest",
+            "latitude": 70.6634,
+            "longitude": 23.6821
+        },
+        {
+            "name": "Honningsvåg",
+            "latitude": 70.9821,
+            "longitude": 25.9711
+        },
+        {
+            "name": "Mo i Rana",
+            "latitude": 66.3128,
+            "longitude": 14.1428
+        },
+        {
+            "name": "Røst",
+            "latitude": 67.5176,
+            "longitude": 12.1081
+        },
+        {
+            "name": "Vardø",
+            "latitude": 70.3700,
+            "longitude": 31.1107
+        },
+        {
+            "name": "Longyearbyen",
+            "latitude": 78.2232,
+            "longitude": 15.6469
+        },
+        {
+            "name": "Ny-Ålesund",
+            "latitude": 78.9231,
+            "longitude": 11.9222
+        },
+        {
+            "name": "Barentsburg",
+            "latitude": 78.0650,
+            "longitude": 14.2333
+        },
+        {
+            "name": "Skjervøy",
+            "latitude": 70.0291,
+            "longitude": 20.9712
+        },
+        {
+            "name": "Berlevåg",
+            "latitude": 70.8593,
+            "longitude": 29.0877
+        },
+        {
+            "name": "Lakselv",
+            "latitude": 70.0516,
+            "longitude": 24.9733
+        },
+        {
+            "name": "Narvik",
+            "latitude": 68.4385,
+            "longitude": 17.4278
+        },
+        {
+            "name": "Harstad",
+            "latitude": 68.7980,
+            "longitude": 16.5417
+        },
+        {
+            "name": "Svolvær",
+            "latitude": 68.2346,
+            "longitude": 14.5686
+        },
+        {
+            "name": "Sandnessjøen",
+            "latitude": 66.0210,
+            "longitude": 12.6312
+        }
+    ],
+        "Russia": [
+            { 
+                "name": "Murmansk", 
+                "latitude": 68.9585, 
+                "longitude": 33.0827 
+            },
+
+            { 
+                "name": "Apatity", 
+                "latitude": 67.5670, 
+                "longitude": 33.3930 
+            },
+            { 
+                "name": "Kirovsk", 
+                "latitude": 67.6197, 
+                "longitude": 33.6726 
+            },
+            { 
+                "name": "Monchegorsk", 
+                "latitude": 67.9389, 
+                "longitude": 32.8731 
+            },
+            { 
+                "name": "Severomorsk", 
+                "latitude": 69.0762, 
+                "longitude": 33.4176 
+            },
+            { 
+                "name": "Olenegorsk", 
+                "latitude": 68.1500, 
+                "longitude": 33.2667 
+            },
+            { 
+                "name": "Lovozero", 
+                "latitude": 68.0103, 
+                "longitude": 35.0182 
+            },
+            { 
+                "name": "Kandalaksha", 
+                "latitude": 67.1561, 
+                "longitude": 32.4144 
+            },
+            { 
+                "name": "Polyarnye Zori", 
+                "latitude": 67.3702, 
+                "longitude": 32.4976 
+            },
+            { 
+                "name": "Zapolyarny", 
+                "latitude": 69.4133, 
+                "longitude": 30.7990 
+            },
+            { 
+                "name": "Pechenga", 
+                "latitude": 69.5439, 
+                "longitude": 31.2422 
+            },
+            { 
+                "name": "Nikel", 
+                "latitude": 69.4128, 
+                "longitude": 30.2225 
+            },
+            { 
+                "name": "Vorkuta", 
+                "latitude": 67.4974, 
+                "longitude": 64.0601 
+            },
+            { 
+                "name": "Norilsk", 
+                "latitude": 69.3558, 
+                "longitude": 88.1893 
+            },
+            { 
+                "name": "Dikson", 
+                "latitude": 73.5067, 
+                "longitude": 80.5464 
+            },
+            { 
+                "name": "Tiksi", 
+                "latitude": 71.6256, 
+                "longitude": 128.8738 
+            },
+            { 
+                "name": "Chersky", 
+                "latitude": 68.7443, 
+                "longitude": 161.3304 
+            },
+            { 
+                "name": "Batagay", 
+                "latitude": 67.6333, 
+                "longitude": 134.6333 
+            },
+            { 
+                "name": "Igarka", 
+                "latitude": 67.4667, 
+                "longitude": 86.5833 
+            },
+            { 
+                "name": "Talnakh", 
+                "latitude": 69.4867, 
+                "longitude": 88.3972 
+            }
+    ],
+    "Sweden": [
+        {
+            "name": "Abisko",
+            "latitude": 68.3498,
+            "longitude": 18.8294
+        },
+        {
+            "name": "Kiruna",
+            "latitude": 67.8558,
+            "longitude": 20.2253
+        },
+        {
+            "name": "Östersund",
+            "latitude": 63.1792,
+            "longitude": 14.6357
+        },
+        {
+            "name": "Umeå",
+            "latitude": 63.8258,
+            "longitude": 20.2630
+        },
+        {
+            "name": "Luleå",
+            "latitude": 65.5848,
+            "longitude": 22.1547
+        },
+        {
+            "name": "Pajala",
+            "latitude": 67.2100,
+            "longitude": 23.3666
+        },
+        {
+            "name": "Gällivare",
+            "latitude": 67.1331,
+            "longitude": 20.6561
+        },
+        {
+            "name": "Jokkmokk",
+            "latitude": 66.6110,
+            "longitude": 19.8373
+        },
+        {
+            "name": "Arjeplog",
+            "latitude": 66.0506,
+            "longitude": 17.8867
+        },
+        {
+            "name": "Arvidsjaur",
+            "latitude": 65.5900,
+            "longitude": 19.1786
+        },
+        {
+            "name": "Storuman",
+            "latitude": 65.0956,
+            "longitude": 17.1126
+        },
+        {
+            "name": "Vilhelmina",
+            "latitude": 64.6244,
+            "longitude": 16.6573
+        },
+        {
+            "name": "Tärnaby",
+            "latitude": 65.7114,
+            "longitude": 15.2796
+        },
+        {
+            "name": "Sorsele",
+            "latitude": 65.5351,
+            "longitude": 17.5378
+        },
+        {
+            "name": "Dorotea",
+            "latitude": 64.2637,
+            "longitude": 16.4052
+        },
+        {
+            "name": "Åsele",
+            "latitude": 64.1596,
+            "longitude": 17.3471
+        },
+        {
+            "name": "Strömsund",
+            "latitude": 63.8513,
+            "longitude": 15.5561
+        },
+        {
+            "name": "Sundsvall (northern outskirts)",
+            "latitude": 62.4305,
+            "longitude": 17.3332
+        },
+        {
+            "name": "Hemavan",
+            "latitude": 65.8144,
+            "longitude": 15.0837
+        },
+        {
+            "name": "Karesuando",
+            "latitude": 68.4401,
+            "longitude": 22.4716
+        }
+    ],
+    "United States": [
+        {
+            "name": "Fairbanks",
+            "latitude": 64.8378,
+            "longitude": -147.7164
+        },
+        {
+            "name": "Barrow (Utqiaġvik)",
+            "latitude": 71.2906,
+            "longitude": -156.7886
+        },
+        {
+            "name": "Nome",
+            "latitude": 64.5011,
+            "longitude": -165.4064
+        },
+        {
+            "name": "North Pole",
+            "latitude": 64.7511,
+            "longitude": -147.3494
+        },
+        {
+            "name": "Galena",
+            "latitude": 64.7330,
+            "longitude": -156.9311
+        },
+        {
+            "name": "Kotzebue",
+            "latitude": 66.8980,
+            "longitude": -162.5967
+        },
+        {
+            "name": "Anchorage",
+            "latitude": 61.2181,
+            "longitude": -149.9003
+        },
+        {
+            "name": "Delta Junction",
+            "latitude": 64.0404,
+            "longitude": -145.7322
+        },
+        {
+            "name": "Tok",
+            "latitude": 63.3363,
+            "longitude": -142.9846
+        },
+        {
+            "name": "Tanana",
+            "latitude": 65.1708,
+            "longitude": -152.0788
+        },
+        {
+            "name": "Fort Yukon",
+            "latitude": 66.5619,
+            "longitude": -145.2560
+        },
+        {
+            "name": "Bettles",
+            "latitude": 66.9139,
+            "longitude": -151.5297
+        },
+        {
+            "name": "Coldfoot",
+            "latitude": 67.2526,
+            "longitude": -150.1817
+        },
+        {
+            "name": "Wiseman",
+            "latitude": 67.4076,
+            "longitude": -150.1041
+        },
+        {
+            "name": "Healy",
+            "latitude": 63.8675,
+            "longitude": -148.9686
+        },
+        {
+            "name": "Nenana",
+            "latitude": 64.5640,
+            "longitude": -149.0934
+        },
+        {
+            "name": "Manley Hot Springs",
+            "latitude": 65.0020,
+            "longitude": -150.6283
+        },
+        {
+            "name": "Eagle",
+            "latitude": 64.7769,
+            "longitude": -141.1994
+        },
+        {
+            "name": "Gambell",
+            "latitude": 63.7796,
+            "longitude": -171.7322
+        },
+        {
+            "name": "St. Paul Island",
+            "latitude": 57.1253,
+            "longitude": -170.2708
+        }
+    ]
+}

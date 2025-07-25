@@ -31,7 +31,7 @@ class AuroraProbabilityDataSourceImpl implements AuroraProbabilityDataSource {
       }
 
       final data = jsonDecode(response.body);
-      logger.d('[AuroraAPI] Response received');
+      logger.i('[AuroraAPI] Response received');
 
       return _parseOvationData(
         data,

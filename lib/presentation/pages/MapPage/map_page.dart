@@ -1,4 +1,5 @@
 import 'package:aurora_app/presentation/controllers/MapPage/map_controller.dart';
+import 'package:aurora_app/presentation/widgets/MapPage/best_place_card.dart';
 import 'package:aurora_app/presentation/widgets/MapPage/kp_card.dart';
 import 'package:aurora_app/presentation/widgets/MapPage/map_card.dart';
 import 'package:aurora_app/utils/constants/paddings.dart';
@@ -37,6 +38,8 @@ class MapPage extends GetView<MapController> {
                       ),
                       const SizedBox(height: largePadding),
                       MapCard(),
+                      const SizedBox(height: largePadding),
+                      BestPlaceCard(),
                     ],
                   )
                 : Text(

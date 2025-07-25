@@ -38,14 +38,14 @@ class ForecastImagesPage extends GetView<ForecastImagesController> {
                     GestureDetector(
                       onTap: () => controller.openInFullscreen(img['url']!),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(mediumPadding),
                         child: Image.network(
                           refreshedUrl,
                           loadingBuilder: (ctx, child, loadingProgress) {
                             if (loadingProgress == null) return child;
-                            return const Center(
+                            return Center(
                               child: Padding(
-                                padding: EdgeInsets.all(12),
+                                padding: EdgeInsets.all(mediumPadding),
                                 child: CircularProgressIndicator(),
                               ),
                             );

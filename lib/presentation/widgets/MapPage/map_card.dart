@@ -42,7 +42,7 @@ class MapCard extends GetView<MapCardController> {
                   child: Text(
                     'Aurora Map',
                     textAlign: TextAlign.center,
-                    style: Get.theme.textTheme.titleMedium,
+                    style: Get.theme.textTheme.titleSmall,
                   ),
                 ),
               ),
