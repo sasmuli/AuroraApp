@@ -18,14 +18,30 @@ class ForecastRepositoryImpl implements ForecastRepository {
       rethrow;
     }
   }
+  
+  @override
+  Future<KpShortTermForecastData> getKpForecastData() async {
+    try {
+      return await _forecastDataSource.fetchKpForecastData();
+    } catch (e) {
+      logger.e('Error in getKpForecastData: $e');
+      rethrow;
+    }
+  }
 
   @override
-  Future<({KpHistoryData history})> getAllKpData() async {
+  Future<({KpHistoryData history, KpShortTermForecastData shortTermForecast})> getAllKpData() async {
     try {
       // Fetch all data concurrently for better performance
-      final results = await Future.wait([getKpHistoryData()]);
+      final results = await Future.wait([
+        getKpHistoryData(),
+        getKpForecastData(),
+      ]);
 
-      return (history: results[0]);
+      return (
+        history: results[0] as KpHistoryData,
+        shortTermForecast: results[1] as KpShortTermForecastData,
+      );
     } catch (e) {
       logger.e('Error in getAllKpData: $e');
       rethrow;
