@@ -2,19 +2,23 @@ import 'package:aurora_app/data/data_sources/aurora_data_source.dart';
 import 'package:aurora_app/data/data_sources/aurora_probability_data_source.dart';
 import 'package:aurora_app/data/data_sources/cloud_data_source.dart';
 import 'package:aurora_app/data/data_sources/location_data_source.dart';
+import 'package:aurora_app/data/data_sources/forecast_data_source.dart';
 import 'package:aurora_app/data/repository_impls/aurora_probability_repository_impl.dart';
 import 'package:aurora_app/data/repository_impls/aurora_repository_impls.dart';
 import 'package:aurora_app/data/repository_impls/cloud_repository_impls.dart';
 import 'package:aurora_app/data/repository_impls/location_repository_impl.dart';
+import 'package:aurora_app/data/repository_impls/forecast_repository_impl.dart';
 import 'package:aurora_app/domain/repositories/aurora_probability_repository.dart';
 import 'package:aurora_app/domain/repositories/aurora_repository.dart';
 import 'package:aurora_app/domain/repositories/cloud_repository.dart';
+import 'package:aurora_app/domain/repositories/forecast_repository.dart';
 import 'package:aurora_app/domain/repositories/location_repository.dart';
 import 'package:aurora_app/presentation/controllers/MapPage/best_aurora_places_controller.dart';
 import 'package:aurora_app/presentation/controllers/MapPage/forecast_images_controller.dart';
 import 'package:aurora_app/presentation/controllers/MapPage/full_screen_map_controller.dart';
 import 'package:aurora_app/presentation/controllers/MapPage/map_controller.dart';
 import 'package:aurora_app/presentation/controllers/MapPage/map_card_controller.dart';
+import 'package:aurora_app/presentation/controllers/forecastPage/forecast_controller.dart';
 import 'package:aurora_app/presentation/controllers/home_controller.dart';
 import 'package:get/get.dart';
 import 'package:aurora_app/services/navigation_service.dart';
@@ -42,6 +46,8 @@ class AppBindings extends Bindings {
 
     Get.put<CloudDataSource>(CloudDataSourceImpl());
 
+    Get.put<ForecastDataSource>(ForecastDataSourceImpl());
+
     //Repositories Imps
     Get.put<AuroraRepository>(
       AuroraRepositoryImpl(Get.find<AuroraRemoteDataSource>()),
@@ -56,6 +62,10 @@ class AppBindings extends Bindings {
     );
 
     Get.put<CloudRepository>(CloudRepositoryImpl(Get.find<CloudDataSource>()));
+
+    Get.put<ForecastRepository>(
+      ForecastRepositoryImpl(Get.find<ForecastDataSource>()),
+    );
 
     //Controllers
     Get.lazyPut<HomeController>(
@@ -89,6 +99,11 @@ class AppBindings extends Bindings {
 
     Get.lazyPut<BestAuroraPlacesController>(
       () => BestAuroraPlacesController(),
+      fenix: true,
+    );
+
+    Get.lazyPut<ForecastController>(
+      () => ForecastController(Get.find<ForecastRepository>()),
       fenix: true,
     );
   }
