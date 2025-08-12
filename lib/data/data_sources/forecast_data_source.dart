@@ -10,6 +10,9 @@ abstract class ForecastDataSource {
 
   /// Fetches short-term KP index forecast data from NOAA (3-day forecast)
   Future<KpShortTermForecastData> fetchKpForecastData();
+  
+  /// Fetches long-term KP index forecast data from NOAA (27-day outlook)
+  Future<KpLongTermForecastData> fetchKpLongTermForecastData();
 }
 
 class ForecastDataSourceImpl implements ForecastDataSource {
@@ -21,7 +24,8 @@ class ForecastDataSourceImpl implements ForecastDataSource {
   static const String _kpShortTermUrl =
       'https://services.swpc.noaa.gov/text/3-day-geomag-forecast.txt';
   // Reserved for future implementation - Long-term predictions (not currently used)
-  // static const String _kpLongTermUrl = 'https://services.swpc.noaa.gov/text/27-day-outlook.txt';
+  static const String _kpLongTermUrl =
+      'https://services.swpc.noaa.gov/text/27-day-outlook.txt';
 
   ForecastDataSourceImpl({http.Client? httpClient})
     : _httpClient = httpClient ?? http.Client();
@@ -79,6 +83,23 @@ class ForecastDataSourceImpl implements ForecastDataSource {
       }
     } catch (e) {
       logger.e('Error fetching KP Index forecast data: $e');
+      rethrow;
+    }
+  }
+  
+  @override
+  Future<KpLongTermForecastData> fetchKpLongTermForecastData() async {
+    try {
+      final response = await _httpClient.get(Uri.parse(_kpLongTermUrl));
+
+      if (response.statusCode == 200) {
+        final String forecastText = response.body;
+        return _parseKpLongTermForecastData(forecastText);
+      } else {
+        throw Exception('Failed to load KP Index long-term forecast data');
+      }
+    } catch (e) {
+      logger.e('Error fetching KP Index long-term forecast data: $e');
       rethrow;
     }
   }
@@ -194,5 +215,54 @@ class ForecastDataSourceImpl implements ForecastDataSource {
       'Dec': 12,
     };
     return months[mon]!;
+  }
+  
+  /// Parses the NOAA "27-day-outlook.txt" KP table (daily values)
+  KpLongTermForecastData _parseKpLongTermForecastData(String text) {
+    final entries = <KpIndexEntry>[];
+    
+    try {
+      // Extract the data table portion
+      final tableRegex = RegExp(
+        r'#\s+UTC\s+Radio Flux\s+Planetary\s+Largest\s+#\s+Date\s+10\.7 cm\s+A Index\s+Kp Index\s*([\s\S]+)',
+        multiLine: true,
+      );
+      
+      final match = tableRegex.firstMatch(text);
+      if (match == null) return KpLongTermForecastData(entries: []);
+      
+      final tableText = match.group(1)!;
+      
+      // Match each row in the table
+      final rowRegex = RegExp(
+        r'(\d{4})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s+(\d+)\s+(\d+)\s+(\d+)',
+        multiLine: true,
+      );
+      
+      final matches = rowRegex.allMatches(tableText);
+      
+      for (final m in matches) {
+        final year = int.parse(m.group(1)!);
+        final month = _monthNumber(m.group(2)!);
+        final day = int.parse(m.group(3)!);
+        // We don't need radioFlux = int.parse(m.group(4)!);
+        // We don't need aIndex = int.parse(m.group(5)!);
+        final kpValue = double.parse(m.group(6)!);
+        
+        entries.add(
+          KpIndexEntry(
+            timestamp: DateTime.utc(year, month, day),
+            kpValue: kpValue,
+          ),
+        );
+      }
+      
+      entries.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+      logger.d('Parsed ${entries.length} long-term KP forecast entries');
+      return KpLongTermForecastData(entries: entries);
+    } catch (e) {
+      logger.e('Error parsing KP long-term forecast data: $e');
+      return KpLongTermForecastData(entries: []);
+    }
   }
 }

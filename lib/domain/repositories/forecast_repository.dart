@@ -6,7 +6,10 @@ abstract class ForecastRepository {
 
   /// Fetches the short-term KP index forecast data from NOAA
   Future<KpShortTermForecastData> getKpForecastData();
+  
+  /// Fetches the long-term KP index forecast data from NOAA (27-day outlook)
+  Future<KpLongTermForecastData> getKpLongTermForecastData();
 
   /// Fetches all KP index data (history, short-term, and long-term) in a single call
-  Future<({KpHistoryData history, KpShortTermForecastData shortTermForecast})> getAllKpData();
+  Future<({KpHistoryData history, KpShortTermForecastData shortTermForecast, KpLongTermForecastData longTermForecast})> getAllKpData();
 }

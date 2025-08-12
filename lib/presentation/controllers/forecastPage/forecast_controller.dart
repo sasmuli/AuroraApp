@@ -53,6 +53,7 @@ class ForecastController extends GetxController {
 
       kpHistoryData.value = allData.history;
       kpShortTermForecast.value = allData.shortTermForecast;
+      kpLongTermForecast.value = allData.longTermForecast;
 
       logger.d('KP Index data loaded successfully');
     } catch (e) {

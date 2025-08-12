@@ -50,11 +50,21 @@ class ForecastPage extends GetView<ForecastController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Forecast chart - only showing future time periods
+                // 3-day forecast chart - only showing future time periods
                 if (controller.kpShortTermForecast.value != null) ...[
                   Text('KP Index - Forecast', style: Get.textTheme.titleLarge),
                   const SizedBox(height: mediumPadding),
                   _buildForecastChart(),
+                  const SizedBox(height: largePadding),
+                ],
+                // 27-day forecast chart
+                if (controller.kpLongTermForecast.value != null) ...[
+                  Text(
+                    '27-Day KP Index Outlook',
+                    style: Get.textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: mediumPadding),
+                  _buildLongTermForecastChart(),
                   const SizedBox(height: largePadding),
                 ],
                 // History chart
@@ -82,7 +92,85 @@ class ForecastPage extends GetView<ForecastController> {
 
     final entries = historyData.entries;
 
-    return _buildBarChart(entries: entries, maxY: 9.0, title: '');
+    return _buildBarChart(entries: entries, maxY: 9.0);
+  }
+
+  Widget _buildLongTermForecastChart() {
+    final longTermData = controller.kpLongTermForecast.value;
+    if (longTermData == null || longTermData.entries.isEmpty) {
+      return const Center(child: Text('No long-term forecast data available'));
+    }
+
+    // Convert UTC timestamps to local time for display
+    final localTimeEntries = longTermData.entries
+        .map(
+          (entry) => KpIndexEntry(
+            timestamp: entry.timestamp.toLocal(),
+            kpValue: entry.kpValue,
+          ),
+        )
+        .toList();
+
+    logger.d(
+      'Displaying ${localTimeEntries.length} long-term KP index forecasts',
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(bottom: 4.0, left: 8.0),
+          child: Text(
+            'Scroll horizontally to view all forecast data',
+            style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+          ),
+        ),
+        SizedBox(
+          height: 200,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            child: SizedBox(
+              width: max(
+                MediaQuery.of(Get.context!).size.width,
+                localTimeEntries.length * 50,
+              ),
+              child: _buildBarChart(
+                entries: localTimeEntries,
+                maxY: 9.0,
+                isLongTerm: true,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _getMonthAbbreviation(int month) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return months[month - 1];
+  }
+
+  Widget _formatLongTermDateWidget(DateTime timestamp) {
+    return Text(
+      '${_getMonthAbbreviation(timestamp.month)} ${timestamp.day}',
+      style: Get.theme.textTheme.bodySmall,
+      textAlign: TextAlign.center,
+    );
   }
 
   Widget _buildForecastChart() {
@@ -136,7 +224,6 @@ class ForecastPage extends GetView<ForecastController> {
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
             child: SizedBox(
-              // Set width to have approximately 50 logical pixels per bar
               width: max(
                 MediaQuery.of(Get.context!).size.width,
                 localTimeFutureEntries.length * 50,
@@ -144,7 +231,7 @@ class ForecastPage extends GetView<ForecastController> {
               child: _buildBarChart(
                 entries: localTimeFutureEntries,
                 maxY: 9.0,
-                title: 'Local time',
+                isLongTerm: false,
               ),
             ),
           ),
@@ -185,7 +272,7 @@ class ForecastPage extends GetView<ForecastController> {
   Widget _buildBarChart({
     required List<KpIndexEntry> entries,
     required double maxY,
-    required String title,
+    bool isLongTerm = false,
   }) {
     // We'll control the scrolling externally with SingleChildScrollView
     // Set a fixed width for each bar to ensure consistent spacing
@@ -196,19 +283,28 @@ class ForecastPage extends GetView<ForecastController> {
         alignment: BarChartAlignment.center,
         maxY: 9.0, // Always show up to 9
         minY: 0,
+
         barTouchData: BarTouchData(
           enabled: true,
-          handleBuiltInTouches: true,
+          handleBuiltInTouches: false, // we’re not using tap/hover
           touchTooltipData: BarTouchTooltipData(
+            getTooltipColor: (context) => Colors.transparent,
+            tooltipPadding: EdgeInsets.zero,
+            tooltipMargin: 2,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
-              final entry = entries[group.x.toInt()];
+              final v = entries[group.x.toInt()].kpValue;
               return BarTooltipItem(
-                'KP: ${entry.kpValue.toStringAsFixed(1)}\n${entry.timestamp.hour}:00',
-                const TextStyle(color: Colors.white),
+                v.toStringAsFixed(2), // e.g. 3.33
+                const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
               );
             },
           ),
         ),
+
         // Fixed interval values for Y axis labels
         titlesData: FlTitlesData(
           show: true,
@@ -218,14 +314,18 @@ class ForecastPage extends GetView<ForecastController> {
               getTitlesWidget: (value, meta) {
                 final index = value.toInt();
                 if (index >= 0 && index < entries.length) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: smallPadding),
-                    child: _formatChartTimestampWidget(
-                      entries[index].timestamp,
-                    ),
-                  );
+                  if (isLongTerm) {
+                    return _formatLongTermDateWidget(entries[index].timestamp);
+                  } else {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: smallPadding),
+                      child: _formatChartTimestampWidget(
+                        entries[index].timestamp,
+                      ),
+                    );
+                  }
                 }
-                return const Text('');
+                return const SizedBox.shrink();
               },
               reservedSize: 40,
             ),
@@ -237,15 +337,14 @@ class ForecastPage extends GetView<ForecastController> {
               interval: 2, // Force interval of 2
               getTitlesWidget: (value, meta) {
                 // Only show values: 0, 2, 4, 6, 8
-                if (value == 0 ||
-                    value == 2 ||
-                    value == 4 ||
-                    value == 6 ||
-                    value == 8) {
+                if (value % 2 == 0 && value <= (isLongTerm ? 8 : 8)) {
+                  // Use consistent comma format for both chart types
+                  final formattedValue = '${value.toInt()},00';
+
                   return Padding(
                     padding: const EdgeInsets.only(right: extraSmallPadding),
                     child: Text(
-                      '${value.toInt()},00',
+                      formattedValue,
                       style: Get.theme.textTheme.bodyLarge,
                     ),
                   );
@@ -255,10 +354,7 @@ class ForecastPage extends GetView<ForecastController> {
             ),
           ),
           rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false),
-            axisNameWidget: title.isNotEmpty ? Text(title) : null,
-          ),
+          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         ),
         borderData: FlBorderData(show: false),
         gridData: FlGridData(
@@ -273,18 +369,17 @@ class ForecastPage extends GetView<ForecastController> {
           getDrawingHorizontalLine: (value) =>
               FlLine(color: Colors.grey.withValues(alpha: 0.3), strokeWidth: 1),
         ),
-        barGroups: entries.asMap().entries.map((entry) {
-          final index = entry.key;
-          final kpEntry = entry.value;
-          final barColor = _getBarColor(kpEntry.kpValue);
-
+        barGroups: entries.asMap().entries.map((e) {
+          final i = e.key;
+          final kp = e.value.kpValue;
           return BarChartGroupData(
-            x: index,
+            x: i,
+            showingTooltipIndicators: const [0],
             barRods: [
               BarChartRodData(
-                toY: kpEntry.kpValue,
-                color: barColor,
+                toY: kp,
                 width: barWidth,
+                color: _getBarColor(kp),
                 borderRadius: BorderRadius.zero,
               ),
             ],
